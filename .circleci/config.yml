@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@1.6.0
+
 jobs:
     check-docker-code:
       docker:
@@ -26,3 +29,11 @@ workflows:
   default:
     jobs:
       - check-docker-code
+      - docker/publish:
+          image: $DOCKER_LOGIN/udacity-capstone-app
+          path: ~/repo
+          update-description: true
+          docker-context: ~/repo
+          tag: ${CIRCLE_SHA1:0:7},latest
+          requires:
+            - check-docker-code
