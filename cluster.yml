@@ -11,10 +11,8 @@ nodeGroups:
     desiredCapacity: 2
     volumeSize: 80
     ssh:
-      publicKeyPath: ~/.ssh/ec2_id_rsa.pub
+      allow: true 
   - name: ng-2
     instanceType: t2.micro
     desiredCapacity: 2
     volumeSize: 100
-    ssh:
-      publicKeyPath: ~/.ssh/ec2_id_rsa.pub
