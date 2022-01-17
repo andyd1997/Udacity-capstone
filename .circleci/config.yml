@@ -55,7 +55,7 @@ jobs:
             command: |
               # Updating the cluster name in the Yaml 
               sed -i "s/basic-cluster/udacity-capstone-${CIRCLE_SHA1:0:7}/g" cluster.yml
-              eksctl create cluster -f cluster.yml
+              eksctl create cluster --name=cluster-1 --nodes=4 --ssh-access --ssh-public-key=udacity_capstone --region=eu-west-1
         - run:
             name: store new cluster name
             command: |
