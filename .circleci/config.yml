@@ -24,7 +24,7 @@ jobs:
 
     upload-docker:
       docker:
-        - image:  cimg/go:1.16
+        - image:  circleci/golang:1.15
         
       working_directory: ~/repo
       steps:
