@@ -43,6 +43,43 @@ jobs:
             docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
             docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
             docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
+            
+    create-kubernetes-cluster:
+      docker:
+        - image: alpine/k8s:1.15.12
+      working_directory: /tmp/workspace
+      steps:
+        - checkout
+        - run:
+            name: create new kubernetes cluster
+            command: |
+              # Updating the cluster name in the Yaml 
+              sed -i "s/basic-cluster/udacity-capstone-${CIRCLE_SHA1:0:7}/g" cluster.yml
+              eksctl create cluster -f cluster.yml
+        - run:
+            name: store new cluster name
+            command: |
+              echo "udacity-capstone-${CIRCLE_SHA1:0:7}" > cluster.txt
+              cat cluster.txt
+        - run:
+            name: Deploy Application on Kubernetes
+            command: |
+              aws eks update-kubeconfig --name "udacity-capstone-${CIRCLE_SHA1:0:7}"
+              export KUBECONFIG=/root/.kube/config
+              kubectl run udacity-project\
+                  --image=$dockerpath\
+                  --port=80 --labels app=udacity-capstone
+        - run:
+            name: Add service ip to a file
+            command: |
+              echo "$(kubectl get services nginx-web-app-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > service.txt
+              cat service.txt
+        - persist_to_workspace:
+            root: /tmp/workspace
+            paths:
+              - cluster.txt
+              - cluster-old.txt
+              - service.txt
 
       
 
@@ -54,3 +91,6 @@ workflows:
       - upload-docker:
           requires:
             - check-docker-code
+      - create-kubernetes-cluster:
+          requires:
+            - upload-docker
