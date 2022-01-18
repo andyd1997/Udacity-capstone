@@ -1,7 +1,7 @@
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: udacity-capstone-deployment
+  name: udacity-capstone
 spec:
   selector:
     matchLabels:
@@ -22,13 +22,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: udacity-capstone-deployment
+  name: udacity-capstone
   labels:
-    app: udacity-capstone-deployment
+    app: udacity-capstone
 spec:
   type: LoadBalancer
   selector:
-    app: udacity-capstone-deployment
+    app: udacity-capstone
   ports:
     - port: 8000
       targetPort: 80
