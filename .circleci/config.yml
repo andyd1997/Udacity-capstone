@@ -109,5 +109,5 @@ workflows:
   default:
     jobs:
        - deploy-cluster:
-          cluster-name: capstone-project
+          cluster-name: udacity-capstone
 
