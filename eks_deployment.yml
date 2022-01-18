@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacity-capstone
+  labels:
+    app: udacity-capstone
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udacity-capstone
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: udacity-capstone
+    spec:
+      volumes:
+      - name: uploads
+        emptyDir: {}
+      containers:
+      - name: udacity-capstone
+        image: andyd1997/udacity-capstone:latest
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: "Always"
+      nodeSelector:
+        kubernetes.io/os: linux
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone
+spec:
+  selector:
+    app: capstone
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
