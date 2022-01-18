@@ -108,6 +108,9 @@ jobs:
 workflows:
   default:
     jobs:
+       - create-cluster:
+           cluster-name: udacity-capstone
        - deploy-cluster:
           cluster-name: udacity-capstone
+          requires: [create-cluster]
 
