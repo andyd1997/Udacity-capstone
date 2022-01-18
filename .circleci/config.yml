@@ -44,23 +44,6 @@ jobs:
             docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
             docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
             
-    create-kubernetes-cluster:
-      docker:
-        - image: alpine/k8s:1.15.12
-      working_directory: /tmp/workspace
-      steps:
-        - checkout
-        - run:
-            name: create new kubernetes cluster
-            command: |
-              # Updating the cluster name in the Yaml 
-              sed -i "s/basic-cluster/udacity-capstone-${CIRCLE_SHA1:0:7}/g" cluster.yml
-              eksctl create cluster --name=cluster-1 --nodegroup-name standard-nodes --node-type t3.small --ssh-access --ssh-public-key=udacity_capstone --region=eu-west-1
-        - run:
-            name: store new cluster name
-            command: |
-              echo "udacity-capstone-${CIRCLE_SHA1:0:7}" > cluster.txt
-              cat cluster.txt
 
       
 
@@ -68,5 +51,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - create-kubernetes-cluster
+      - create-cluster
       
