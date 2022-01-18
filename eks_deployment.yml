@@ -1,48 +1,35 @@
----
-apiVersion: apps/v1
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: udacity-capstone
-  labels:
-    app: udacity-capstone
+  name: udacity-capstone-deployment
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: udacity-capstone
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 50%
-      maxSurge: 1
+  replicas: 1 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
         app: udacity-capstone
     spec:
-      volumes:
-      - name: uploads
-        emptyDir: {}
       containers:
       - name: udacity-capstone
         image: andyd1997/udacity-capstone:latest
         ports:
-        - name: http
-          containerPort: 80
-        imagePullPolicy: "Always"
-      nodeSelector:
-        kubernetes.io/os: linux
+        - containerPort: 80
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: capstone
+  name: udacity-capstone-deployment
+  labels:
+    app: udacity-capstone-deployment
 spec:
-  selector:
-    app: capstone
   type: LoadBalancer
+  selector:
+    app: udacity-capstone-deployment
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
+    - port: 8000
+      targetPort: 80
+      protocol: TCP
