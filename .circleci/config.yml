@@ -83,12 +83,31 @@ jobs:
            nodes-max: 2
            ssh-access: false
            ssh-public-key: ''
+           
+    deploy-cluster:
+     executor: aws-eks/python3
+     parameters:
+       cluster-name:
+         description: |
+           udacity-capstone
+         type: string
+     steps:
+      - checkout
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          install-kubectl: true
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: eks_deployment.yml
+          resource-name: deployment/udacity-capstone-deployment
+
 
     
 
 workflows:
   default:
     jobs:
-      - create-cluster:
-          cluster-name: udacity-capstone
+       - deploy-cluster:
+          cluster-name: capstone-project
 
