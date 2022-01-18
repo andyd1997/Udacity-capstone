@@ -55,31 +55,12 @@ jobs:
             command: |
               # Updating the cluster name in the Yaml 
               sed -i "s/basic-cluster/udacity-capstone-${CIRCLE_SHA1:0:7}/g" cluster.yml
-              eksctl create cluster --name=cluster-1 --nodes=4 --ssh-access --ssh-public-key=udacity_capstone --region=eu-west-1
+              eksctl create cluster --name=cluster-1 --nodegroup-name standard-nodes --node-type t3.small --ssh-access --ssh-public-key=udacity_capstone --region=eu-west-1
         - run:
             name: store new cluster name
             command: |
               echo "udacity-capstone-${CIRCLE_SHA1:0:7}" > cluster.txt
               cat cluster.txt
-        - run:
-            name: Deploy Application on Kubernetes
-            command: |
-              aws eks update-kubeconfig --name "udacity-capstone-${CIRCLE_SHA1:0:7}"
-              export KUBECONFIG=/root/.kube/config
-              kubectl run udacity-project\
-                  --image=$dockerpath\
-                  --port=80 --labels app=udacity-capstone
-        - run:
-            name: Add service ip to a file
-            command: |
-              echo "$(kubectl get services nginx-web-app-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > service.txt
-              cat service.txt
-        - persist_to_workspace:
-            root: /tmp/workspace
-            paths:
-              - cluster.txt
-              - cluster-old.txt
-              - service.txt
 
       
 
