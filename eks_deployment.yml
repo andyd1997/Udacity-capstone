@@ -28,7 +28,7 @@ spec:
         image: andyd1997/udacity-capstone:9e5dfd3b-0ac9-4138-ba72-61ccd6d0374a
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: 80
         imagePullPolicy: "Always"
       nodeSelector:
         kubernetes.io/os: linux
@@ -44,5 +44,5 @@ spec:
   type: LoadBalancer
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 8000
+    targetPort: 80
