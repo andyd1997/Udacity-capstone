@@ -1,9 +1,9 @@
 from flask import Flask
+
 app = Flask(__name__)
 
 @app.route('/')
-def home():
-    return "<h1 style='text-align: center;'>Welcome to my Capstone Project - Andrew Drysdale!</h1>"
+def index():
+    return 'Welcome to Andys Capstone Project'
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True) # specify port=80
+app.run(host='0.0.0.0', port=80)
