@@ -138,3 +138,17 @@ workflows:
        - test-cluster:
           cluster-name: udacity-capstone
           requires: [deploy-cluster]
+          
+       - aws-eks/update-container-image:
+          cluster-name: udacity-capstone
+          container-image-updates: 'udacity-capstone:d202390c-5f69-4bcf-9780-b5fdfd4b82ee'
+          post-steps:
+            - kubernetes/delete-resource:
+                resource-names: udacity-capstone
+                resource-types: deployment
+                wait: true
+          record: true
+          requires:
+            - upload-docker
+            - deploy-cluster
+          resource-name: deployment/udacity-capstone
