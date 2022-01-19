@@ -25,7 +25,7 @@ spec:
         emptyDir: {}
       containers:
       - name: udacity-capstone
-        image: andyd1997/udacity-capstone:latest
+        image: andyd1997/udacity-capstone:d2bdbe79-cc8b-4220-82de-f483754bf0a7
         ports:
         - name: http
           containerPort: 80
