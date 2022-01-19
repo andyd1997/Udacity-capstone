@@ -132,10 +132,9 @@ workflows:
        - create-cluster:
           cluster-name: udacity-capstone
           requires: [upload-docker]
-       - test-cluster:
-          cluster-name: udacity-capstone
-          requires: [create-cluster]
        - deploy-cluster:
           cluster-name: udacity-capstone
-          requires: [test-cluster]
-
+          requires: [create-cluster]
+       - test-cluster:
+          cluster-name: udacity-capstone
+          requires: [deploy-cluster]
