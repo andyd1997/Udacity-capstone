@@ -126,6 +126,12 @@ jobs:
 workflows:
   default:
     jobs:
+       - check-docker-code
+       - upload-docker:
+          requires: [check-docker-code]
+       - create-cluster:
+          cluster-name: udacity-capstone
        - test-cluster:
           cluster-name: udacity-capstone
+          requires: [create-cluster]
 
