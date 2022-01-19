@@ -135,4 +135,7 @@ workflows:
        - test-cluster:
           cluster-name: udacity-capstone
           requires: [create-cluster]
+       - deploy-cluster:
+          cluster-name: udacity-capstone
+          requires: [test-cluster]
 
