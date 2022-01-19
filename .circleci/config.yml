@@ -131,6 +131,7 @@ workflows:
           requires: [check-docker-code]
        - create-cluster:
           cluster-name: udacity-capstone
+          requires: [upload-docker]
        - test-cluster:
           cluster-name: udacity-capstone
           requires: [create-cluster]
